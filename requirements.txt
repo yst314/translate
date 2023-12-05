@@ -19,6 +19,7 @@ httpx==0.25.2
 idna==3.6
 jsonpatch==1.33
 jsonpointer==2.4
+keyboard==0.13.5
 langchain==0.0.345
 langchain-core==0.0.9
 langsmith==0.0.69
@@ -35,7 +36,6 @@ pydantic==2.5.2
 pydantic_core==2.14.5
 PyGetWindow==0.0.9
 PyMsgBox==1.0.9
-pynput==1.7.6
 pyocr==0.8.5
 pyperclip==1.8.2
 PyRect==0.2.0

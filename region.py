@@ -1,5 +1,5 @@
-from pynput import mouse, keyboard
 import pyautogui
+import keyboard
 import dataclasses
 
 class Region:
@@ -28,40 +28,30 @@ region = Region()
 num_press = 0
 kill = False
 
-def select_region():
+def select_region(hotkey):
     global region, num_press, kill
 
-    def press(key):
+    def on_triggered():
         global region, num_press, kill
-        try:
-            if key == keyboard.Key.esc:     # mouseのListenerを止める
-                keyboard_listener.stop()
-                kill = True
-        except:
-            pass
+
         try:
             
-            if key.char == "z":
-                num_press += 1
-                print(num_press)
-                if num_press == 1:
-                    x, y = pyautogui.position()
-                    print(f'Start:{x},{y}')
-                    region.x1, region.y1 = x, y
-                elif num_press >= 2:
-                    x, y = pyautogui.position()
-                    print(f'End  :{x},{y}')
-                    region.x2, region.y2 = x, y
-                
-                    keyboard_listener.stop()
-                    region.active = True
+            num_press += 1
+            print(num_press)
+            if num_press == 1:
+                x, y = pyautogui.position()
+                print(f'Start:{x},{y}')
+                region.x1, region.y1 = x, y
+            elif num_press >= 2:
+                x, y = pyautogui.position()
+                print(f'End  :{x},{y}')
+                region.x2, region.y2 = x, y
+                region.active = True
         except:
             pass
     
 
-    
-    keyboard_listener = keyboard.Listener(on_press=press)
-    keyboard_listener.start()    
+    keyboard.add_hotkey(hotkey, on_triggered)
     while True:
         if kill:
             return False
@@ -74,5 +64,8 @@ def select_region():
             continue
 
 if __name__ == "__main__":
-    region = select_region()
+    import config
+    cfg = config.load_config()
+    hotkey = cfg["hotkey"]
+    region = select_region(hotkey)
     print(region.get_points())

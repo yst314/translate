@@ -7,9 +7,14 @@ from translate_llm import GptTransaltor
 from capture import capture
 from region import select_region
 
+import config
+
+cfg = config.load_config()
+hotkey = cfg["hotkey"]
+
 gpt = GptTransaltor()
 while True:
-    region = select_region()
+    region = select_region(hotkey)
     im = capture(region)
 
     start = time.time()

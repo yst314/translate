@@ -4,8 +4,12 @@ from PIL import Image
 import time
 from capture import capture
 from region import select_region
+import config
+cfg = config.load_config()
+hotkey = cfg["hotkey"]
+
 while True:
-    region = select_region()
+    region = select_region(hotkey)
     im = capture(region)
 
     start = time.time()

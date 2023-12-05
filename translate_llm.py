@@ -17,7 +17,7 @@ class GptTransaltor:
             api_key=OPENAI_API_KEY,
             callbacks=[StreamingStdOutCallbackHandler()]
         )
-        template = """日本語に翻訳してください.
+        template = """入力はOCRで認識した文章です、そのため文章には"I am"が"1 am"のような間違いがある可能性があります。文脈から適切な文章を推測し、日本語に翻訳してください.
         変換前:{input}
         変換後:"""
         self.prompt = PromptTemplate(template=template, input_variables=["input"])
