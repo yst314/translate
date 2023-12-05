@@ -18,8 +18,6 @@ while True:
 
     # txt = txt.replace("\n", " ")
 
-    print(txt)
-    print("-----------------------------------")
     start = time.time()
     ja = gpt.translate(txt)
     time_translate = time.time() - start

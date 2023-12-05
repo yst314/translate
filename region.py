@@ -1,4 +1,5 @@
 from pynput import mouse, keyboard
+import pyautogui
 import dataclasses
 
 class Region:
@@ -24,12 +25,6 @@ class Region:
 
 region = Region()
 
-cursor_x, cursor_y = 0, 0
-
-def move(x,y):
-    global cursor_x, cursor_y
-    cursor_x=x
-    cursor_y=y
 num_press = 0
 kill = False
 
@@ -39,8 +34,7 @@ def select_region():
     def press(key):
         global region, num_press, kill
         try:
-            if key == keyboard.Key.esc:
-                mouse_listener.stop()       # mouseのListenerを止める
+            if key == keyboard.Key.esc:     # mouseのListenerを止める
                 keyboard_listener.stop()
                 kill = True
         except:
@@ -49,14 +43,16 @@ def select_region():
             
             if key.char == "z":
                 num_press += 1
+                print(num_press)
                 if num_press == 1:
-                    print(f'Start:{cursor_x},{cursor_y}')
-                    region.x1, region.y1 = cursor_x, cursor_y
+                    x, y = pyautogui.position()
+                    print(f'Start:{x},{y}')
+                    region.x1, region.y1 = x, y
                 elif num_press >= 2:
-                    print(f'End  :{cursor_x},{cursor_y}')
-                    region.x2, region.y2 = cursor_x, cursor_y
+                    x, y = pyautogui.position()
+                    print(f'End  :{x},{y}')
+                    region.x2, region.y2 = x, y
                 
-                    mouse_listener.stop()       # mouseのListenerを止める
                     keyboard_listener.stop()
                     region.active = True
         except:
@@ -64,8 +60,6 @@ def select_region():
     
 
     
-    mouse_listener = mouse.Listener(on_move=move)
-    mouse_listener.start()
     keyboard_listener = keyboard.Listener(on_press=press)
     keyboard_listener.start()    
     while True:
