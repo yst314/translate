@@ -1,4 +1,7 @@
 Yog Sothoth's Yardが読めなすぎる
+
+OCR(Tesseract) => 翻訳(Deepl or Gpt)
+
 ## Install
 ### pip
 ```shell
@@ -6,12 +9,12 @@ pip install -r requirements.txt
 ```
 ### deeplのapiキーの設定
 
-`.env`ファイルを作成して"DEEPL_API_KEY=${deeplのapiキー}"を書く
+`.env`ファイルを作成して`DEEPL_API_KEY=${deeplのapiキー}`を書く
 
-### [Tesseract](https://tesseract-ocr.github.io/tessdoc/Installation.html)をインストールする
-[windows 版のインストール](https://github.com/UB-Mannheim/tesseract/wiki)
+### Tesseract(ocr)をインストールする
+- [windows 版のインストール](https://github.com/UB-Mannheim/tesseract/wiki)
 
-環境変数のPathに`C:\Program Files\Tesseract-OCR`の Path を通す
+- 環境変数のPathに`C:\Program Files\Tesseract-OCR`の Path を通す
 
 ### 実行
 
@@ -24,6 +27,11 @@ pip install -r requirements.txt
 - ocr(tesseract): 0.917316198348999 (689 x 408 jpg)
 - translate(deepl): 1.2258949279785156 (1375 文字)
 
-## メモ
 
-中国語は一文字の情報量が多いから中国語を翻訳する方が api の文字数の節約になる。知らんけど
+
+## Unity直翻訳よりいいところ
+- 原文見ながらできるので英語勉強できる。（知らんけど）
+- Unityじゃなくても翻訳できる。
+
+## メモ
+中国語は一文字の情報量が多い(?)から中国語を翻訳する方が api の文字数の節約になる。(知らんけど)
