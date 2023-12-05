@@ -5,3 +5,5 @@ sample.txt
 samplt.txt
 *.jpg
 *.png
+results/
+venv/

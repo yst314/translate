@@ -27,11 +27,11 @@ region = Region()
 
 num_press = 0
 kill = False
-
-def select_region(hotkey):
-    global region, num_press, kill
-
-    def on_triggered():
+class SelectRegion:
+    def __init__(self, hotkey):
+        keyboard.add_hotkey(hotkey, self.on_triggered)
+    
+    def on_triggered(self):
         global region, num_press, kill
 
         try:
@@ -49,23 +49,25 @@ def select_region(hotkey):
                 region.active = True
         except:
             pass
-    
 
-    keyboard.add_hotkey(hotkey, on_triggered)
-    while True:
-        if kill:
-            return False
-        elif region.active:
-            region.sort()
-            region.active = False
-            num_press = 0 
-            return region
-        else:
-            continue
+    def select_region(self):
+        global region, num_press, kill
+
+        while True:
+            if kill:
+                return False
+            elif region.active:
+                region.sort()
+                region.active = False
+                num_press = 0 
+                return region
+            else:
+                continue
 
 if __name__ == "__main__":
     import config
     cfg = config.load_config()
     hotkey = cfg["hotkey"]
-    region = select_region(hotkey)
+    select_region = SelectRegion(hotkey)
+    region = select_region.select_region()
     print(region.get_points())
