@@ -1,5 +1,7 @@
 .env
 __pycache__
-*.txt
+result.txt
+sample.txt
+samplt.txt
 *.jpg
 *.png
