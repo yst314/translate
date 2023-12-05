@@ -8,14 +8,15 @@ import time
 from capture import capture
 from region import SelectRegion
 import config
+import keyboard
 
 cfg = config.load_config()
 hotkey = cfg["hotkey"]
 select_region = SelectRegion(hotkey)
+region = select_region.select_region()
 
-
-while True:
-    region = select_region.select_region()
+def on_triggered():
+    print("start translation")
     im = capture(region)
 
     start = time.time()
@@ -41,3 +42,13 @@ while True:
     shutil.move("screenshot.jpg", f"results/screenshot_{num}.jpg")
     
     # print(f"ocr: {time_ocr}, translate: {time_translate}")
+    
+def run(hotkey):
+    keyboard.add_hotkey(hotkey, on_triggered)
+
+if __name__=="__main__":
+    keyboard.remove_hotkey(hotkey)
+
+    run(hotkey)
+    while True:
+        pass
