@@ -1,13 +1,28 @@
-## [Tesseract](https://tesseract-ocr.github.io/tessdoc/Installation.html)
+Yog Sothoth's Yardが読めなすぎる
+## Install
+### pip
+```shell
+pip install -r requirements.txt
+```
+### deeplのapiキーの設定
 
-windows 版のインストール[link](https://github.com/UB-Mannheim/tesseract/wiki)
+`.env`ファイルを作成して"DEEPL_API_KEY=${deeplのapiキー}"を書く
 
-`Tesseract-OCR`の Path を通す
+### [Tesseract](https://tesseract-ocr.github.io/tessdoc/Installation.html)をインストールする
+[windows 版のインストール](https://github.com/UB-Mannheim/tesseract/wiki)
+
+環境変数のPathに`C:\Program Files\Tesseract-OCR`の Path を通す
+
+### 実行
+
+`python test.py`で実行。
+
+`config.yml`の`hotkey`で設定されてるキーを二回押すとその範囲でスクショして翻訳
 
 ## 実行時間
 
-- ocr: 0.917316198348999 (689 x 408 jpg)
-- translate: 1.2258949279785156 (1375 文字)
+- ocr(tesseract): 0.917316198348999 (689 x 408 jpg)
+- translate(deepl): 1.2258949279785156 (1375 文字)
 
 ## メモ
 
