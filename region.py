@@ -1,6 +1,7 @@
 import pyautogui
 import keyboard
 import dataclasses
+import time
 
 class Region:
     def __init__(self, x1=0, y1=0, x2=0, y2=0):
@@ -8,7 +9,6 @@ class Region:
         self.y1: int = y1
         self.x2: int = x2
         self.y2: int = y2
-        self.active = False
 
     def get_points(self):
         return self.x1, self.y1, self.x2, self.y2
@@ -23,45 +23,39 @@ class Region:
             self.y1 = self.y2
             self.y2 = tmp
 
-region = Region()
-
-num_press = 0
-kill = False
 class SelectRegion:
     def __init__(self, hotkey):
+        self.region = Region()
+        self.num_press = 0
+        self.kill = False
+        self.active = True
         keyboard.add_hotkey(hotkey, self.on_triggered)
     
     def on_triggered(self):
-        global region, num_press, kill
-
-        try:
-            
-            num_press += 1
-            print(num_press)
-            if num_press == 1:
+        if self.active:
+            self.num_press += 1
+            if self.num_press == 1:
                 x, y = pyautogui.position()
                 print(f'Start:{x},{y}')
-                region.x1, region.y1 = x, y
-            elif num_press >= 2:
+                self.region.x1, self.region.y1 = x, y
+            elif self.num_press >= 2:
                 x, y = pyautogui.position()
                 print(f'End  :{x},{y}')
-                region.x2, region.y2 = x, y
-                region.active = True
-        except:
-            pass
+                self.region.x2, self.region.y2 = x, y
+                self.active = False
 
+        
     def select_region(self):
-        global region, num_press, kill
-
+        self.active = True
         while True:
-            if kill:
+            if self.kill:
                 return False
-            elif region.active:
-                region.sort()
-                region.active = False
-                num_press = 0 
-                return region
+            elif not self.active:
+                self.region.sort()
+                self.num_press = 0 
+                return self.region
             else:
+                time.sleep(0.5)
                 continue
 
 if __name__ == "__main__":
