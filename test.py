@@ -1,43 +1,74 @@
 import os
-from glob import glob
-import translate_deepl
 import shutil
-import ocr
-from PIL import Image
 import time
+
+import config
+import ocr
+from translator import create_translator
+
+from glob import glob
+from PIL import Image
+
 from capture import capture
 from region import SelectRegion
-import config
 
 cfg = config.load_config()
 hotkey = cfg["hotkey"]
+source_lang = cfg["source_lang"]
+target_lang = cfg["target_lang"]
+translator_name = cfg["translator"]
 select_region = SelectRegion(hotkey)
 
+Translator = create_translator(translator_name)
+translator = Translator()
 
 while True:
     region = select_region.select_region()
-    im = capture(region)
-
+    try:
+        im = capture(region)
+    except ValueError:
+        print(f"Shape {region.get_points()} is not appropriate.")
+        continue
+    
     start = time.time()
     txt = ocr.ocr(im)
     time_ocr = time.time() - start
 
     txt = txt.replace("\n", " ")
+    # "1 AM", "1AM"って書くだろ普通
     txt = txt.replace("|", "I")
+    txt = txt.replace("1am", "I am")
+    txt = txt.replace("1 am", "I am")
+    txt = txt.replace("1'm", "I'm")
 
     # print(len(txt))
     start = time.time()
-    ja = translate_deepl.translate_client(txt, target_lang="JA")
+    try:
+        ja = translator.translate(txt, source_lang, target_lang)
+    except ValueError:
+        print(f"Err: `{txt}` text must not be empty")
+        continue
     time_translate = time.time() - start
 
     print(txt)
     print(ja)
-    num = len(glob("results/trans_*.txt"))
+    num = len(glob("results/result_*.yaml"))
     os.makedirs("results", exist_ok=True)
-    with open(f"results/trans_{num}.txt", "w",encoding="UTF-8") as f:
-        f.write(str(ja))
-    with open(f"results/ocr_{num}.txt", "w", encoding="UTF-8") as f:
-        f.write(str(txt))
+    result={
+        "ocr": txt,
+        "translation": ja,
+        "time":{
+            "ocr": time_ocr,
+            "translation": time_translate
+        },
+        "num_text": len(txt),
+        "num_translate": len(ja),
+        "cfg": cfg,
+        "img": f"results/screenshot_{num}.jpg"
+    }
+
+    config.save_yaml(result, f"results/result_{num}.yaml")
     shutil.move("screenshot.jpg", f"results/screenshot_{num}.jpg")
+
     
     # print(f"ocr: {time_ocr}, translate: {time_translate}")
