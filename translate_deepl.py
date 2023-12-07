@@ -27,7 +27,7 @@ class DeeplTranslator(Translator):
 
     def translate(self, text, source_lang, target_lang):
         result = self.translator.translate_text(text, source_lang=source_lang, target_lang=target_lang)
-        return result
+        return result.text
 
 if __name__ == "__main__":
     translator  = DeeplTranslator()

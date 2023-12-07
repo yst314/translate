@@ -22,15 +22,14 @@ select_region = SelectRegion(hotkey)
 Translator = create_translator(translator_name)
 translator = Translator()
 
-while True:
+def main():
     region = select_region.select_region()
     print("Start translation")
     try:
         im = capture(region)
     except ValueError:
         print(f"Shape {region.get_points()} is not appropriate.")
-        continue
-    
+        return False
     start = time.time()
     txt = ocr.ocr(im)
     time_ocr = time.time() - start
@@ -48,7 +47,7 @@ while True:
         ja = translator.translate(txt, source_lang, target_lang)
     except ValueError:
         print(f"Err: `{txt}` text must not be empty")
-        continue
+        return False
     time_translate = time.time() - start
 
     print(txt)
@@ -70,6 +69,10 @@ while True:
 
     config.save_yaml(result, f"results/result_{num}.yaml")
     shutil.move("screenshot.jpg", f"results/screenshot_{num}.jpg")
-
+    return True
     
     # print(f"ocr: {time_ocr}, translate: {time_translate}")
+
+if __name__ == "__main__":
+    while True:
+        main()

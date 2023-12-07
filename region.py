@@ -1,5 +1,5 @@
 import pyautogui
-import keyboard
+from pynput import keyboard
 import dataclasses
 import time
 
@@ -28,7 +28,11 @@ class SelectRegion:
         self.region = Region()
         self.num_press = 0
         self.active = True
-        keyboard.add_hotkey(hotkey, self.on_triggered)
+        listener = keyboard.GlobalHotKeys({
+            f'{hotkey}': self.on_triggered
+        })
+        listener.start()
+
     def on_triggered(self):
         if self.active:
             self.num_press += 1
@@ -45,7 +49,6 @@ class SelectRegion:
         
     def select_region(self):
         self.active = True
-        i = 0
         while True:
             if not self.active:
                 self.region.sort()
