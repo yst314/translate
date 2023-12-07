@@ -24,6 +24,7 @@ translator = Translator()
 
 while True:
     region = select_region.select_region()
+    print("Start translation")
     try:
         im = capture(region)
     except ValueError:
@@ -52,7 +53,7 @@ while True:
 
     print(txt)
     print(ja)
-    num = len(glob("results/result_*.yaml"))
+    num = len(glob("results/result_*.yaml"))+1
     os.makedirs("results", exist_ok=True)
     result={
         "ocr": txt,
@@ -62,7 +63,7 @@ while True:
             "translation": time_translate
         },
         "num_text": len(txt),
-        "num_translate": len(ja),
+        "num_translate": len(str(ja)),
         "cfg": cfg,
         "img": f"results/screenshot_{num}.jpg"
     }

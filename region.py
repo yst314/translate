@@ -27,10 +27,8 @@ class SelectRegion:
     def __init__(self, hotkey):
         self.region = Region()
         self.num_press = 0
-        self.kill = False
         self.active = True
         keyboard.add_hotkey(hotkey, self.on_triggered)
-    
     def on_triggered(self):
         if self.active:
             self.num_press += 1
@@ -47,15 +45,14 @@ class SelectRegion:
         
     def select_region(self):
         self.active = True
+        i = 0
         while True:
-            if self.kill:
-                return False
-            elif not self.active:
+            if not self.active:
                 self.region.sort()
                 self.num_press = 0 
                 return self.region
             else:
-                time.sleep(0.5)
+                time.sleep(0.3)
                 continue
 
 if __name__ == "__main__":
