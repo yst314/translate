@@ -46,7 +46,6 @@ class SelectRegion:
                 self.region.x2, self.region.y2 = x, y
                 self.active = False
 
-        
     def select_region(self):
         self.active = True
         while True:

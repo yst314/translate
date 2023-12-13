@@ -1,4 +1,4 @@
 hotkey: "<ctrl>+<shift>+q"
-source_lang: "EN"
-target_lang: "JA"
+source_lang: "JA"
+target_lang: "EN"
 translator: "deepl" #"argos", "deepl", "gpt"

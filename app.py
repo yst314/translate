@@ -13,13 +13,18 @@ import ocr
 from capture import capture
 
 def main(page: ft.page):
+    t_status = ft.Text()
     t_ocr = ft.Text()
     t_trans = ft.Text()
+    page.add(t_status)
     page.add(t_ocr)
     page.add(t_trans)
     page.window_height = 500
     page.window_width = 300
     page.window_maximizable = False
+
+    t_status.value = "Initializing..."
+
     page.update()
 
     cfg = config.load_config()
@@ -33,8 +38,13 @@ def main(page: ft.page):
     translator = Translator()
 
     while True:
+        t_status.value = "Wainting for input."
+        page.update()
 
         region = select_region.select_region()
+        t_status.value = "Translating..."
+        page.update()
+
         print("Start translation")
         try:
             im = capture(region)
@@ -42,7 +52,7 @@ def main(page: ft.page):
             print(f"Shape {region.get_points()} is not appropriate.")
             continue 
         start = time.time()
-        txt = ocr.ocr(im)
+        txt = ocr.ocr(im, source_lang)
         time_ocr = time.time() - start
 
         txt = txt.replace("\n", " ")
@@ -63,7 +73,7 @@ def main(page: ft.page):
 
         print(txt)
         print(ja)
-        txt = txt.replace("'", "\'")
+        txt = txt.replace("'", "\'")    
         ja = ja.replace("'", "\'")
 
         num = len(glob("results/result_*.yaml"))+1

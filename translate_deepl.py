@@ -21,13 +21,43 @@ def translate(text, target_lang, source_lang):
 
     return result
 
+
 class DeeplTranslator(Translator):
     def __init__(self):
         self.translator = deepl.Translator(API_KEY)
 
     def translate(self, text, source_lang, target_lang):
+        source_lang = self.check_source_lang(source_lang)
+        target_lang =   self.check_target_lang(target_lang)
+        print(source_lang)
         result = self.translator.translate_text(text, source_lang=source_lang, target_lang=target_lang)
         return result.text
+
+    def check_source_lang(self, lang):
+        langs = {
+            "EN": "EN",
+            "JA": "JA",
+            "ZH": "ZH",
+            "KR": "KR",
+        }
+        try:
+            return langs[lang]
+        except KeyError as e:
+            raise e
+
+
+    def check_target_lang(self, lang):
+        langs = {
+            "EN": "EN-US",
+            "JA": "JA",
+            "ZH": "ZH",
+            "KR": "KR",
+        }
+        try:
+            return langs[lang]
+        except KeyError as e:
+            raise e
+
 
 if __name__ == "__main__":
     translator  = DeeplTranslator()
